@@ -1,6 +1,6 @@
 package engine;
 
-import Util.Time;
+import util.Time;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
@@ -40,10 +40,12 @@ public class Window {
             case 0:
                 currentScene = new LevelEditorScene();
                 currentScene.init();
+                currentScene.start();
                 break;
             case 1:
                 currentScene = new LevelScene();
                 currentScene.init();
+                currentScene.start();
                 break;
             default:
                 assert false : "Unknown scene '" + newScene + "'";
@@ -56,6 +58,10 @@ public class Window {
             Window.window = new Window();
         }
         return Window.window;
+    }
+
+    public static Scene getScene() {
+        return get().currentScene;
     }
 
     public void run() {
@@ -119,8 +125,9 @@ public class Window {
 
     public void loop() {
         float beginTime = Time.getTime();
-        float endTime = Time.getTime();
+        float endTime; // = Time.getTime();
         float dt = -1.0f;
+        beginTime = (float)glfwGetTime();
 
         while (!glfwWindowShouldClose(glfwWindow)) {
             // Poll events
@@ -135,7 +142,8 @@ public class Window {
 
             glfwSwapBuffers(glfwWindow);
 
-            endTime = Time.getTime();
+            // endTime = Time.getTime();
+            endTime = (float)glfwGetTime();
             dt = endTime - beginTime;
             beginTime = endTime;
         }
