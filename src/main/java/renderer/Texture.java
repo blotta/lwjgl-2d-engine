@@ -6,13 +6,13 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.stb.STBImage.stbi_image_free;
-import static org.lwjgl.stb.STBImage.stbi_load;
+import static org.lwjgl.stb.STBImage.*;
 
 public class Texture {
 
     private String filepath;
     private int texID;
+    private int width, height;
 
     public Texture(String filepath) {
         this.filepath = filepath;
@@ -40,9 +40,12 @@ public class Texture {
         IntBuffer channels = BufferUtils.createIntBuffer(1);
         // stbi_load returns byte data from image (rgb[a]) and puts the width, height and channels
         // values into our own IntBuffers. channels is 3 for rgb, 4 for rgba
+        stbi_set_flip_vertically_on_load(true);
         ByteBuffer image = stbi_load(filepath, width, height, channels, 0);
 
         if (image != null) {
+            this.width = width.get(0);
+            this.height = height.get(0);
             if (channels.get(0) == 3) {
                 // RGB
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width.get(0), height.get(0),
@@ -69,5 +72,13 @@ public class Texture {
 
     public void unbind() {
         glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
     }
 }

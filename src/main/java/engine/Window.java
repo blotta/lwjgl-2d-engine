@@ -1,6 +1,5 @@
 package engine;
 
-import util.Time;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
@@ -28,9 +27,9 @@ public class Window {
         this.height = 720;
         this.title = "Engine";
 
-        r = 1;
-        g = 1;
-        b = 1;
+        r = 0;
+        g = 0;
+        b = 0;
         a = 1;
         fadeToBlack = false;
     }
@@ -124,10 +123,9 @@ public class Window {
     }
 
     public void loop() {
-        float beginTime = Time.getTime();
+        float beginTime = (float)glfwGetTime();
         float endTime; // = Time.getTime();
         float dt = -1.0f;
-        beginTime = (float)glfwGetTime();
 
         while (!glfwWindowShouldClose(glfwWindow)) {
             // Poll events
@@ -142,7 +140,6 @@ public class Window {
 
             glfwSwapBuffers(glfwWindow);
 
-            // endTime = Time.getTime();
             endTime = (float)glfwGetTime();
             dt = endTime - beginTime;
             beginTime = endTime;
